@@ -12,7 +12,7 @@ Docker + Docker-compose
 
 - Clone repository `git clone https://github.com/robomillo/new_york_taxis.git`
 - Navigate to root of directory
-- run `docker-compose up`
+- run `docker-compose up`. (if airflow webserver gets stuck in a cycle of restarting, run `docker-compose down -v && docker-compose up` )
 
 ### Shortcuts
 
