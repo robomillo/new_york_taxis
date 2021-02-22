@@ -16,8 +16,8 @@ Docker + Docker-compose
 
 ### Shortcuts
 
-In order to reduce the data downloaded and processed for the scope of the case study i have restricted 
-the data to a monthly dataset from 2019 only.
+In order to reduce the size data downloaded and processed for the sake of speed, I have restricted 
+the data to a monthly dataset in 2019 only.
 
 ### Running Pipeline
 
