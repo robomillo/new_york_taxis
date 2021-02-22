@@ -30,7 +30,7 @@ services:
 
   airflow-webserver:
     <<: *airflow-common
-    command: bash -c "airflow db init && airflow webserver"
+    command: bash -c "airflow db init && airflow connections add 'etl_database' --conn-uri 'postgresql://airflow:airflow@postgres:5432/etl' && airflow webserver"
     environment:
       <<: *airflow-common-env
       _AIRFLOW_DB_UPGRADE: 'true'
