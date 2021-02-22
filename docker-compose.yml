@@ -1,0 +1,57 @@
+version: '3'
+x-airflow-common:
+  &airflow-common
+  build: ./airflow
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW_CONN_ETL_CONN: postgresql+psycopg2://airflow:airflow@postgres/etl
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__FERNET_KEY: 'OVuZCP2oN9Qged5GmT6BXJNrkQRakJy59y09ls_ynkU='
+  volumes:
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+  user: "50000:50000"
+  depends_on:
+    - postgres
+
+services:
+
+  postgres:
+    build: ./postgres
+    container_name: postgres
+    env_file:
+      - postgres.env
+    ports:
+      - 5439:5432
+    volumes:
+      - postgres-vol:/var/lib/postgresql/data/
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: bash -c "airflow db init && airflow webserver"
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: airflow
+      _AIRFLOW_WWW_USER_PASSWORD: airflow
+    ports:
+      - 8080:8080
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    ports:
+      - 8793:8793
+    restart: always
+
+volumes:
+  postgres-vol:

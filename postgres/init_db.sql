@@ -1,0 +1,2 @@
+CREATE DATABASE etl;
+ALTER DATABASE etl OWNER TO airflow;
