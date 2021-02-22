@@ -10,7 +10,7 @@ Docker + Docker-compose
 
 ### Installation
 
-- Clone repository git clone ''
+- Clone repository `git clone https://github.com/robomillo/new_york_taxis.git`
 - Navigate to root of directory
 - run `docker-compose up`
 
